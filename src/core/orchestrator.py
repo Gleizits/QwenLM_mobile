@@ -1,26 +1,31 @@
-from loguru import logger
-from src.interfaces.whatsapp import WhatsAppAdapter
-from src.interfaces.qwen import QwenAdapter
+from rich.panel import Panel
+from src.interfaces.base import InterfazMensajeria, InterfazLLM
+from src.utils.exceptions import console
 
-class BridgeOrchestrator:
-    def __init__(self):
-        self.wa = WhatsAppAdapter()
-        self.qwen = QwenAdapter()
+class OrquestadorPuente:
+    """Lógica simplificada con interfaz de usuario amigable."""
+    
+    def __init__(self, mensajeria: InterfazMensajeria, llm: InterfazLLM):
+        self.mensajeria = mensajeria
+        self.llm = llm
 
-    def run(self):
-        """Bucle principal de ejecución."""
-        logger.info("Orquestador iniciado. Escuchando mensajes de WhatsApp...")
+    def ejecutar(self) -> None:
+        console.print(Panel.fit(
+            "QWEN MOBILE BRIDGE", 
+            style="bold cyan", 
+            subtitle="v1.0"
+        ))
         
-        # Este es un flujo conceptual que debe adaptarse al modo de escucha de wacli
-        for incoming in self.wa.listen_messages():
-            if incoming is None:
-                continue
-            
-            phone, message = incoming
-            logger.info(f"Mensaje recibido de {phone}: {message}")
-            
-            # 1. Procesar con Qwen
-            response = self.qwen.execute_prompt(message)
-            
-            # 2. Responder por WhatsApp
-            self.wa.send_message(phone, response)
+        try:
+            for remitente, mensaje in self.mensajeria.escuchar():
+                # 1. Procesar con Qwen
+                respuesta = self.llm.preguntar(mensaje)
+                
+                # Mostrar respuesta en consola para el usuario local
+                console.print(Panel(respuesta, title="[bold cyan]Qwen Responde[/bold cyan]", border_style="cyan"))
+                
+                # 2. Enviar por WhatsApp
+                self.mensajeria.enviar_mensaje(remitente, respuesta)
+        
+        except KeyboardInterrupt:
+            console.print("\n[bold red]Saliendo...[/bold red]")

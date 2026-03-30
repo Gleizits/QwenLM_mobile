@@ -4,11 +4,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-class Settings(BaseSettings):
-    wacli_path: str = os.getenv("WACLI_PATH", "wacli")
+class Ajustes(BaseSettings):
+    """Configuración simple de la aplicación."""
     qwen_path: str = os.getenv("QWEN_PATH", "qwen")
-    log_level: str = os.getenv("LOG_LEVEL", "INFO")
+    telefono_defecto: str = os.getenv("DEFAULT_PHONE", "")
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-settings = Settings()
+settings = Ajustes()

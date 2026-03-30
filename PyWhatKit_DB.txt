@@ -1,0 +1,15 @@
+Date: 30/3/2026
+Time: 17:59
+Phone Number: +00000000000
+Message: Error inesperado al conectar con Qwen.
+--------------------
+Date: 30/3/2026
+Time: 18:0
+Phone Number: +00000000000
+Message: Error inesperado al conectar con Qwen.
+--------------------
+Date: 30/3/2026
+Time: 18:1
+Phone Number: +00000000000
+Message: Error inesperado al conectar con Qwen.
+--------------------

@@ -2,5 +2,5 @@ python-dotenv
 typer
 pydantic
 pydantic-settings
-loguru
 rich
+pywhatkit
