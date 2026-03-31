@@ -5,8 +5,12 @@ import asyncio
 from typing import Optional, Tuple
 from pathlib import Path
 
-from ..config import QWEN_COMMAND, QWEN_TIMEOUT, BASE_DIR
-from ..utils.logger import setup_logger
+# Agregar src al path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from config import QWEN_COMMAND, QWEN_TIMEOUT, BASE_DIR
+from utils.logger import setup_logger
 
 logger = setup_logger("QwenExecutor")
 

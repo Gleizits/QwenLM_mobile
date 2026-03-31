@@ -1,13 +1,18 @@
 """Comandos para interactuar con Qwen Code."""
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import discord
 from discord.ext import commands
 from discord import app_commands
 
-from ..qwen.executor import QwenExecutor
-from ..qwen.parser import ResponseParser
-from ..security.auth import is_authorized
-from ..utils.logger import setup_logger
+from qwen.executor import QwenExecutor
+from qwen.parser import ResponseParser
+from security.auth import is_authorized
+from utils.logger import setup_logger
 
 logger = setup_logger("QwenCommands")
 

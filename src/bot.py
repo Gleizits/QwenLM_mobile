@@ -1,14 +1,20 @@
 """Bot de Discord para controlar Qwen Code remotamente."""
 
+import sys
+from pathlib import Path
+
+# Agregar src al path para permitir imports directos
+sys.path.insert(0, str(Path(__file__).parent))
+
 import discord
 from discord.ext import commands
-from discord.app_commands import AppCommandError
+# from discord.app_commands import AppCommandError
 
-from .config import DISCORD_TOKEN, ADMIN_USER_ID
-from .commands.general import setup as setup_general
-from .commands.qwen_commands import setup as setup_qwen
-from .security.auth import is_authorized, add_authorized_user
-from .utils.logger import setup_logger
+from config import DISCORD_TOKEN, ADMIN_USER_ID
+from commands.general import setup as setup_general
+from commands.qwen_commands import setup as setup_qwen
+from security.auth import is_authorized, add_authorized_user
+from utils.logger import setup_logger
 
 logger = setup_logger("DiscordBot")
 
