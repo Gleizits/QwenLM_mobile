@@ -1,6 +1,0 @@
-python-dotenv
-typer
-pydantic
-pydantic-settings
-rich
-pywhatkit
