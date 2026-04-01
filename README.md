@@ -13,7 +13,7 @@ Bot de Discord que permite controlar **Qwen Code** desde cualquier dispositivo (
 ### 1. Clonar el repositorio
 
 ```bash
-cd "D:\Users\geiss\Documentos\Proyectos Programación\QwenLM_mobile"
+git --clone https://github.com/Gleizits/QwenLM_mobile.git
 ```
 
 ### 2. Crear entorno virtual

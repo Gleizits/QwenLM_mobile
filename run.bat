@@ -26,6 +26,6 @@ echo.
 echo Iniciando bot...
 echo ========================================
 echo.
-python src\bot.py
+python main.py
 
 pause

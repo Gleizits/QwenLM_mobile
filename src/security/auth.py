@@ -1,12 +1,7 @@
 """Módulo de autenticación y autorización."""
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
-from config import ADMIN_USER_ID
-from security.whitelist import WhitelistManager
+from ..config import ADMIN_USER_ID
+from .whitelist import WhitelistManager
 
 _whitelist_manager = WhitelistManager()
 
