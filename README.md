@@ -44,7 +44,6 @@ pip install -r requirements.txt
    ADMIN_USER_ID=tu_user_id_de_discord
    QWEN_COMMAND=npx
    QWEN_TIMEOUT=300
-   QWEN_WORKING_DIR=C:\ruta\donde\qwen\trabajara
 ```
 
 ## 🔑 Cómo obtener el Token de Discord
@@ -89,5 +88,3 @@ python main.py
 |---------|-------------|
 | `!qwen <comando>` | Ejecuta un comando en Qwen Code |
 | `!qwen-status` | Verifica si Qwen Code está disponible |
-
-**Ejemplos:**
