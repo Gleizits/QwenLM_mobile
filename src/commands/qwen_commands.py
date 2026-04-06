@@ -1,8 +1,10 @@
 """Comandos para interactuar con Qwen Code."""
 
+from contextlib import suppress
+from typing import List
+
 import discord
 from discord.ext import commands
-from discord import app_commands
 
 from ..qwen.executor import QwenExecutor
 from ..qwen.parser import ResponseParser
@@ -10,6 +12,10 @@ from ..security.auth import is_authorized
 from ..utils.logger import setup_logger
 
 logger = setup_logger("QwenCommands")
+
+
+def _split_message(text: str, chunk_size: int = ResponseParser.MAX_MESSAGE_LENGTH) -> List[str]:
+    return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
 
 
 def setup(bot: commands.Bot):
@@ -41,11 +47,11 @@ def setup(bot: commands.Bot):
         response = parser.format_response(success, output)
         
         # Enviar respuesta (posiblemente en múltiples mensajes si es muy largo)
-        await confirm_msg.delete()
+        with suppress(discord.HTTPException):
+            await confirm_msg.delete()
         
-        # Discord tiene límite de 2000 caracteres por mensaje
-        if len(response) > 2000:
-            chunks = [response[i:i+2000] for i in range(0, len(response), 2000)]
+        if len(response) > ResponseParser.MAX_MESSAGE_LENGTH:
+            chunks = _split_message(response)
             for chunk in chunks:
                 await ctx.send(chunk)
         else:

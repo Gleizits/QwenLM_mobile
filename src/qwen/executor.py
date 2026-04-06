@@ -1,16 +1,11 @@
 """Ejecutor de comandos de Qwen Code."""
 
-import subprocess
 import asyncio
 from typing import Optional, Tuple
 from pathlib import Path
 
-# Agregar src al path
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
-from config import QWEN_COMMAND, QWEN_TIMEOUT, BASE_DIR
-from utils.logger import setup_logger
+from ..config import QWEN_COMMAND, QWEN_TIMEOUT, BASE_DIR
+from ..utils.logger import setup_logger
 
 logger = setup_logger("QwenExecutor")
 
@@ -25,7 +20,7 @@ class QwenExecutor:
         Args:
             working_dir: Directorio de trabajo (por defecto, la raíz del proyecto)
         """
-        self.working_dir = working_dir or BASE_DIR.parent
+        self.working_dir = working_dir or BASE_DIR
         self.command = QWEN_COMMAND
         self.timeout = QWEN_TIMEOUT
     
@@ -45,6 +40,9 @@ class QwenExecutor:
             # Ejecutar el comando
             process = await asyncio.create_subprocess_exec(
                 self.command,
+                "exec",
+                "qwen",
+                "--",
                 command,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
@@ -70,6 +68,7 @@ class QwenExecutor:
                     
             except asyncio.TimeoutError:
                 process.kill()
+                await process.communicate()
                 logger.error(f"Timeout después de {self.timeout}s")
                 return False, f"Timeout: El comando tardó más de {self.timeout}s"
                 

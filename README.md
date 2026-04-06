@@ -13,7 +13,7 @@ Bot de Discord que permite controlar **Qwen Code** desde cualquier dispositivo (
 ### 1. Clonar el repositorio
 
 ```bash
-git --clone https://github.com/Gleizits/QwenLM_mobile.git
+git clone https://github.com/Gleizits/QwenLM_mobile.git
 ```
 
 ### 2. Crear entorno virtual
@@ -70,7 +70,7 @@ run.bat
 
 ```bash
 .venv\Scripts\activate
-python src\bot.py
+python main.py
 ```
 
 ## 📱 Comandos disponibles
@@ -116,7 +116,7 @@ python src\bot.py
 ```
 QwenLM_mobile/
 ├── src/
-│   ├── bot.py              # Entry point
+│   ├── bot.py              # Implementación del bot
 │   ├── config.py           # Configuración
 │   ├── commands/           # Comandos de Discord
 │   ├── qwen/               # Integración con Qwen Code
@@ -127,6 +127,7 @@ QwenLM_mobile/
 ├── .env                    # Variables de entorno (NO commitear)
 ├── .env.example            # Ejemplo de configuración
 ├── requirements.txt        # Dependencias
+├── main.py                 # Entry point
 └── run.bat                 # Script de inicio
 ```
 

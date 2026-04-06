@@ -4,6 +4,16 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+
+def _get_int_env(var_name: str, default: int) -> int:
+	value = os.getenv(var_name)
+	if value is None:
+		return default
+	try:
+		return int(value)
+	except ValueError:
+		return default
+
 # Cargar variables de entorno
 load_dotenv()
 
@@ -23,4 +33,4 @@ COMMAND_HISTORY_FILE = DATA_DIR / "command_history.json"
 
 # Qwen Code
 QWEN_COMMAND = os.getenv("QWEN_COMMAND", "qwen")
-QWEN_TIMEOUT = int(os.getenv("QWEN_TIMEOUT", "300"))  # 5 minutos por defecto
+QWEN_TIMEOUT = _get_int_env("QWEN_TIMEOUT", 300)  # 5 minutos por defecto

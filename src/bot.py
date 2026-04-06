@@ -1,14 +1,19 @@
 """Bot de Discord para controlar Qwen Code remotamente."""
 
+import traceback
+
 import discord
 from discord.ext import commands
-from discord.app_commands import AppCommandError
 
-# Cambiamos los '.' por 'src.'
 from src.config import DISCORD_TOKEN, ADMIN_USER_ID
 from src.commands.general import setup as setup_general
 from src.commands.qwen_commands import setup as setup_qwen
-from src.security.auth import is_authorized, add_authorized_user
+from src.security.auth import (
+    is_authorized,
+    add_authorized_user,
+    remove_authorized_user,
+    get_authorized_users,
+)
 from src.utils.logger import setup_logger
 
 logger = setup_logger("DiscordBot")
@@ -19,7 +24,7 @@ intents.message_content = True
 intents.members = True
 
 # Crear bot
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
 
 @bot.event
@@ -44,12 +49,11 @@ async def on_ready():
     except Exception as e:
         logger.error(f"Error en on_ready: {e}")
         print(f"❌ Error en on_ready: {e}")
-        import traceback
         traceback.print_exc()
 
 
 @bot.event
-async def on_command_error(ctx: commands.Context, error):
+async def on_command_error(ctx: commands.Context, error: Exception):
     """Maneja errores de comandos."""
     if isinstance(error, commands.CommandNotFound):
         await ctx.send("❌ Comando no encontrado. Usa `!help` para ver la lista.")
@@ -98,7 +102,9 @@ async def whitelist_command(ctx: commands.Context, action: str, member: discord.
         await ctx.send("❌ Solo el administrador puede usar este comando.")
         return
     
-    if action.lower() == "add":
+    normalized_action = action.lower()
+
+    if normalized_action == "add":
         if member is None:
             await ctx.send("❌ Debes mencionar a un usuario.")
             return
@@ -110,21 +116,19 @@ async def whitelist_command(ctx: commands.Context, action: str, member: discord.
         else:
             await ctx.send(f"⚠️ {member.mention} ya está en la whitelist.")
     
-    elif action.lower() == "remove":
+    elif normalized_action == "remove":
         if member is None:
             await ctx.send("❌ Debes mencionar a un usuario.")
             return
-        
-        from .security.auth import remove_authorized_user
+
         user_id = str(member.id)
         if remove_authorized_user(user_id):
             await ctx.send(f"✅ {member.mention} removido de la whitelist.")
             logger.info(f"Usuario {member} removido de whitelist por {ctx.author}")
         else:
             await ctx.send(f"⚠️ {member.mention} no está en la whitelist.")
-    
-    elif action.lower() == "list":
-        from .security.auth import get_authorized_users
+
+    elif normalized_action == "list":
         users = get_authorized_users()
         
         if not users:
@@ -136,7 +140,7 @@ async def whitelist_command(ctx: commands.Context, action: str, member: discord.
                 try:
                     user = await bot.fetch_user(int(user_id))
                     user_mentions.append(user.mention)
-                except:
+                except (discord.NotFound, discord.HTTPException, ValueError):
                     user_mentions.append(f"`{user_id}`")
             
             await ctx.send(f"📋 **Usuarios autorizados:**\n" + "\n".join(user_mentions))
@@ -156,7 +160,7 @@ def run():
     
     try:
         logger.info("Iniciando bot...")
-        print(f"✅ Iniciando bot...")
+        print("✅ Iniciando bot...")
         bot.run(DISCORD_TOKEN)
     except discord.LoginFailure:
         logger.error("Token de Discord inválido")
