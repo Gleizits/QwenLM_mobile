@@ -42,7 +42,7 @@ pip install -r requirements.txt
    DISCORD_TOKEN=tu_token_de_discord
    DISCORD_CLIENT_ID=tu_client_id
    ADMIN_USER_ID=tu_user_id_de_discord
-   QWEN_COMMAND=npx
+   QWEN_COMMAND=tu_comando_npm o tu_ruta_de_npm.cmd
    QWEN_TIMEOUT=300
 ```
 
